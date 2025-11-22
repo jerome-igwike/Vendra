@@ -1,0 +1,181 @@
+📌 START PROMPT
+
+You are now my Full-Stack Auto Code Auditor.
+My entire project is already imported into Replit, so DO NOT ask me to paste files.
+You have full access to my repository inside this Replit workspace.
+
+Your tasks:
+
+1. FULL PROJECT SCAN (NO FILE PASTING NEEDED)
+
+Scan every folder and file in my project automatically:
+
+app/
+
+pages/
+
+api/
+
+components/
+
+utils/
+
+server/
+
+public/
+
+package.json
+
+next.config.js
+
+.env
+
+any Replit auto-generated files
+
+ANYTHING else inside the repo
+
+Identify:
+
+❌ Replit-generated configs that should be removed
+
+❌ Dead code, broken imports, wrong file paths
+
+❌ Wrong Next.js folder-router mixing (pages vs app)
+
+❌ Missing or broken API routes
+
+❌ Wrong fetch URLs
+
+❌ Wrong form submissions
+
+❌ Missing .env variables
+
+❌ Any bug that will break Vercel deployment
+
+❌ Any issue that breaks email delivery
+
+❌ CORS errors, runtime errors, build failures
+
+❌ Incorrect async/await usage
+
+❌ Anything that will prevent the site from working on Vercel
+
+You must list each issue clearly.
+
+2. FIX EVERYTHING WITHOUT BREAKING MY EXISTING CODE
+
+For each problem you detect, provide:
+
+Root cause
+
+File path
+
+Original broken code reference
+
+A corrected version that fixes the error
+
+An explanation of why the fix works
+
+DO NOT rewrite working components
+
+DO NOT break existing UI
+
+DO NOT remove functionality I rely on
+
+Only surgically correct what’s wrong
+
+3. EMAIL SYSTEM FULL REPAIR
+
+Audit and fully fix the email sending system:
+
+Check existing API routes
+
+Fix them if broken
+
+Replace any Replit-specific code
+
+Ensure they work on Vercel’s serverless functions
+
+Choose the best and most stable email service for Vercel (Resend or Nodemailer recommended)
+
+Create or repair:
+/app/api/send-email/route.js
+
+Make sure:
+
+Form → API route → email sending works perfectly
+
+Inputs are validated
+
+Environment variables are required and referenced safely
+
+The final solution must be 100% deployable on Vercel
+
+4. GENERATE CLEAN .env.example
+
+Include ONLY variables needed for Vercel.
+
+Example structure:
+
+RESEND_API_KEY=
+EMAIL_FROM=
+NEXT_PUBLIC_BASE_URL=
+
+
+Also point out any secrets currently hard-coded in the repo.
+
+5. CLEANUP PLAN
+
+Tell me what files I must delete before deploying, including:
+
+.replit
+
+replit.nix
+
+Replit metadata folders
+
+Any other files that break Vercel
+
+6. COMPLETE VERCEL DEPLOYMENT GUIDE
+
+After fixing everything, give a step-by-step deployment guide, including:
+
+Where to place environment variables
+
+Correct build command
+
+Correct output directory
+
+Any dependencies to install
+
+How to test API routes after deployment
+
+How to test email sending on production
+
+7. FINAL VERIFICATION
+
+Simulate:
+
+A full Vercel build
+
+A user submitting the email form
+
+Serverless function successfully sending an email
+
+API routes returning valid JSON
+
+No runtime crashes
+
+Give me the final confirmation.
+
+⚠️ IMPORTANT RULES
+
+DO NOT ask me to paste code. You already have access.
+
+DO NOT delete functioning features.
+
+DO NOT refactor the entire project unless a file is fundamentally broken.
+
+Fix only what is needed for correct functionality + Vercel deployment.
+
+📌 END PROMPT
