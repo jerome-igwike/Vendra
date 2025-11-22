@@ -2,18 +2,17 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { count, sql } from 'drizzle-orm';
-// ADDED: Missing imports needed for the inline table definition
 import { pgTable, text, varchar, timestamp } from "drizzle-orm/pg-core";
 
 neonConfig.webSocketConstructor = require('ws');
 
-// --- STANDALONE SCHEMA ---
+// --- REWRITE: Schema defined locally ---
 const waitlist = pgTable("waitlist", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
-// -------------------------
+// -------------------------------------
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const db = drizzle({ client: pool, schema: { waitlist } });
