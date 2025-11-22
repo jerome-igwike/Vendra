@@ -9,7 +9,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-6">
         <div className="flex items-center gap-2">
-          <img src="/images/vendra-logo.svg" alt="Vendra" className="h-8" data-testid="img-logo" />
+          <img src="/og-image.png" alt="Vendra" className="h-8" data-testid="img-logo" />
         </div>
         
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
