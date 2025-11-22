@@ -26,10 +26,10 @@ export default function Home() {
   const { toast } = useToast();
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
-  const { data: waitlistCount, isLoading: isLoadingCount, isError: isErrorCount } = useQuery<{ count: number }>({
+ const { data: waitlistCount, isLoading: isLoadingCount, isError: isErrorCount } = useQuery<{ count: number }>({
     queryKey: ["/api/waitlist"],
+    refetchInterval: 5000, // <--- ADD THIS: Refetch every 5 seconds
   });
-
   const form = useForm<EmailFormData>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
