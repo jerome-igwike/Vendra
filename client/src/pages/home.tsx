@@ -27,7 +27,7 @@ export default function Home() {
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
   const { data: waitlistCount, isLoading: isLoadingCount, isError: isErrorCount } = useQuery<{ count: number }>({
-    queryKey: ["/api/waitlist/count"],
+    queryKey: ["/api/waitlist"],
   });
 
   const form = useForm<EmailFormData>({
