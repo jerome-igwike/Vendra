@@ -4,14 +4,14 @@ import { Resend } from 'resend';
 
 // Initialize Supabase (Admin Mode)
 const supabaseUrl = process.env.SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!; // IMPORTANT: Use Service Role Key here!
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!; 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // 1. CORS Headers (Allows your frontend to talk to this)
+  // 1. CORS Headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
@@ -20,7 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   // ---------------------------------------------------------
-  // GET Request: Return the Count (For the progress bar)
+  // GET Request: Return the Count
   // ---------------------------------------------------------
   if (req.method === 'GET') {
     const { count, error } = await supabase
@@ -37,9 +37,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'POST') {
     const { email } = req.body;
 
-    if (!email || !email.includes('@')) {
-      return res.status(400).json({ message: "Invalid email address" });
+    // --- NEW: STRICTER VALIDATION ---
+    // This regex requires: text + @ + text + . + text (at least 2 chars)
+    // e.g. "bob" -> Fail. "bob@" -> Fail. "bob@gmail" -> Fail. "bob@gmail.com" -> Pass.
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    if (!email || !emailRegex.test(email)) {
+      return res.status(400).json({ message: "Please enter a valid email address (e.g. you@company.com)" });
     }
+    // --------------------------------
 
     // A. Save to Supabase
     const { data, error } = await supabase
@@ -49,7 +55,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .single();
 
     if (error) {
-      // Handle "Duplicate Email" error gracefully
       if (error.code === '23505') {
         return res.status(400).json({ message: "You are already on the waitlist!" });
       }
@@ -57,18 +62,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(500).json({ message: "Database error" });
     }
 
-    // B. Get updated count for the email
+    // B. Get updated count
     const { count } = await supabase
       .from('waitlist')
       .select('*', { count: 'exact', head: true });
-
+    
     const position = count || 1;
 
-    // C. Send Email (Fire and forget - don't wait for it)
-    sendWelcomeEmail(email, position);
+    // C. Send Welcome Email
+    await sendWelcomeEmail(email, position);
 
-    return res.status(200).json({
-      success: true,
+    return res.status(200).json({ 
+      success: true, 
       entry: data,
       position: position
     });
@@ -81,19 +86,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 async function sendWelcomeEmail(email: string, position: number) {
   try {
     const fromEmail = process.env.RESEND_FROM_EMAIL || 'Vendra <hello@vendra.ng>';
-    const earlyBirdPerks = position <= 100
+    const earlyBirdPerks = position <= 100 
       ? "You're in the first 100! You've earned 3 months of Pro tier FREE when we launch."
       : "Thank you for joining! We'll keep you updated on our launch progress.";
 
     await resend.emails.send({
       from: fromEmail,
       to: email,
-      subject: "Welcome to Vendra!",
+      subject: position <= 100 ? "You're in the First 100! - Vendra Waitlist" : "Welcome to Vendra!",
       html: `
-        <h1>Welcome to Vendra!</h1>
-        <p>You are #${position} on the list.</p>
-        <p><strong>${earlyBirdPerks}</strong></p>
-        <p>We will update you when we launch in Q1 2026.</p>
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>
+              body { font-family: sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .btn { display: inline-block; padding: 12px 24px; background-color: #00A651; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Welcome to the Vendra Waitlist!</h1>
+              <p>You have successfully secured your spot.</p>
+              
+              <div style="background: #f4f4f5; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <p style="margin: 0; font-size: 18px;"><strong>Your Position: #${position}</strong></p>
+              </div>
+
+              <p>${earlyBirdPerks}</p>
+              
+              <p>We are building the trust layer for African social commerce. We'll keep you posted on our progress towards the Q1 2026 launch.</p>
+              
+              <p>Cheers,<br>The Vendra Team</p>
+            </div>
+          </body>
+        </html>
       `
     });
   } catch (err) {
