@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
-import { waitlist } from '../shared/schema';
-import { insertWaitlistSchema } from '../shared/schema';
+// FIXED: Now points to the local shared folder inside api
+import { waitlist, insertWaitlistSchema } from './shared/schema'; 
 import { eq, count } from 'drizzle-orm';
 import { Resend } from 'resend';
 
