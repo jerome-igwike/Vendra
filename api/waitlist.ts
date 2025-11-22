@@ -9,7 +9,8 @@ import { Resend } from 'resend';
 
 neonConfig.webSocketConstructor = require('ws');
 
-// --- INLINED SCHEMA (Fixes Import Error) ---
+// --- STANDALONE SCHEMA ---
+// We define the table right here so Vercel can't lose the file.
 const waitlist = pgTable("waitlist", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),
@@ -21,7 +22,7 @@ const insertWaitlistSchema = createInsertSchema(waitlist).pick({
 }).extend({
   email: z.string().email("Please enter a valid email address"),
 });
-// -------------------------------------------
+// -------------------------
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const db = drizzle({ client: pool, schema: { waitlist } });
