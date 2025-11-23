@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Shield, Truck, MessageSquare, Smartphone, MapPin, Wallet, TrendingUp, AlertCircle, Check, ChevronDown, Star, Zap, Clock, Users } from "lucide-react";
+import { Shield, Truck, MessageSquare, Smartphone, MapPin, Wallet, TrendingUp, AlertCircle, Check, Clock, Users, ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,10 +26,12 @@ export default function Home() {
   const { toast } = useToast();
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
- const { data: waitlistCount, isLoading: isLoadingCount, isError: isErrorCount } = useQuery<{ count: number }>({
+  // Polling kept active as requested
+  const { data: waitlistCount, isLoading: isLoadingCount, isError: isErrorCount } = useQuery<{ count: number }>({
     queryKey: ["/api/waitlist"],
-    refetchInterval: 5000, // <--- ADD THIS: Refetch every 5 seconds
+    refetchInterval: 5000, 
   });
+
   const form = useForm<EmailFormData>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
@@ -44,7 +46,7 @@ export default function Home() {
     onSuccess: (_, variables) => {
       setSubmittedEmail(variables.email);
       form.reset();
-      queryClient.invalidateQueries({ queryKey: ["/api/waitlist/count"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/waitlist"] });
       toast({
         title: "Welcome to Vendra!",
         description: "You're on the waitlist. Check your email for early bird perks!",
@@ -67,409 +69,316 @@ export default function Home() {
   const progress = Math.min((count / 100) * 100, 100);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background font-sans selection:bg-primary/20">
       <Header />
-      {/* Hero Section */}
-      <section id="hero" className="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-6 py-16 md:py-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-secondary via-background to-accent/20 -z-10" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,166,81,0.08),transparent_50%)] -z-10" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMGE2NTEiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItaDJ2LTJoLTJ6bTAgNHYyaDJ2LTJoLTJ6bS0yIDJ2Mmgydi0yaC0yem0wLTR2Mmgydi0yaC0yem0yLTJ2LTJoLTJ2Mmgyem0wLTR2LTJoLTJ2Mmgyem0yIDJ2LTJoLTJ2Mmgyem0yIDJ2LTJoLTJ2Mmgyem0yIDJ2LTJoLTJ2Mmgyem0yIDJ2LTJoLTJ2Mmgyem0wIDJ2Mmgydi0yaC0yem0wIDRoMnYtMmgtMnYyem0tMiAwaDJ2LTJoLTJ2MnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40 -z-10" />
-        
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-            <div className="flex-1 text-center lg:text-left space-y-8 animate-fade-in">
+      
+      {/* HERO SECTION - UPDATED WITH IMAGES & BETTER COPY */}
+      <section id="hero" className="relative pt-8 pb-16 md:py-24 overflow-hidden">
+        <div className="container px-6 mx-auto">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+            
+            {/* Left Content: Text & Form */}
+            <div className="flex-1 space-y-8 z-10">
               <div className="space-y-4">
-                <Badge variant="secondary" className="text-primary font-semibold px-4 py-2 text-sm">
-                  Africa's Trust Layer
+                <Badge variant="outline" className="border-primary/30 text-primary bg-primary/5 px-4 py-1.5 text-sm rounded-full">
+                  🚀 Launching Q1 2026
                 </Badge>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                  Stop Losing Sales to the{" "}
-                  <span className="text-primary">Trust Gap</span>
+                
+                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1]">
+                  Stop Losing Sales to the <br className="hidden md:block" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-green-600 relative">
+                    "Trust Gap"
+                    {/* Subtle underline decoration */}
+                    <svg className="absolute w-full h-3 -bottom-1 left-0 text-primary/20" viewBox="0 0 100 10" preserveAspectRatio="none">
+                      <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
+                    </svg>
+                  </span>
                 </h1>
-                <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0">
-                  Secure payments + automatic delivery for Instagram & WhatsApp sellers across Nigeria
+                
+                <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
+                  Customers are scared to pay first. You are scared to send first. 
+                  <span className="font-medium text-foreground"> Vendra fixes this.</span> We hold the money securely until the item is delivered.
                 </p>
               </div>
 
-              {submittedEmail ? (
-                <Card className="border-primary/20 bg-accent/30" data-testid="card-success">
-                  <CardContent className="pt-6">
-                    <div className="flex items-start gap-3">
-                      <Check className="w-5 h-5 text-primary mt-0.5" data-testid="icon-success" />
+              {/* Waitlist Form Area */}
+              <div className="p-1 bg-background/50 backdrop-blur-sm rounded-2xl border shadow-sm max-w-md">
+                {submittedEmail ? (
+                  <Card className="border-none shadow-none bg-green-50/50">
+                    <CardContent className="pt-6 flex gap-4">
+                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                        <Check className="w-5 h-5 text-green-600" />
+                      </div>
                       <div>
-                        <p className="font-semibold text-foreground" data-testid="text-success-message">You're on the waitlist!</p>
-                        <p className="text-sm text-muted-foreground mt-1" data-testid="text-success-email">{submittedEmail}</p>
-                        <p className="text-sm text-muted-foreground mt-2">
-                          Check your email for early bird perks and updates.
-                        </p>
+                        <p className="font-bold text-green-900">You're in! Position #{count}</p>
+                        <p className="text-green-700 text-sm mt-1">We've sent a confirmation to {submittedEmail}</p>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ) : (
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto lg:mx-0">
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem className="flex-1">
-                            <FormControl>
-                              <Input
-                                {...field}
-                                type="email"
-                                placeholder="your@email.com"
-                                className="h-12 text-base bg-card border-input"
-                                data-testid="input-email"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <Button
-                        type="submit"
-                        size="lg"
-                        className="h-12 px-8 font-semibold"
-                        disabled={mutation.isPending}
-                        data-testid="button-join-waitlist"
-                      >
-                        {mutation.isPending ? "Joining..." : "Join Waitlist"}
-                      </Button>
-                    </div>
-                    <p className="text-sm text-muted-foreground text-center lg:text-left" data-testid="text-waitlist-count">
-                      {isLoadingCount ? (
-                        "Loading..."
-                      ) : isErrorCount ? (
-                        "Join the waitlist • Launching Q1 2026"
-                      ) : (
-                        `Join ${count}+ vendors building trust • Launching Q1 2026`
-                      )}
-                    </p>
-                  </form>
-                </Form>
-              )}
-            </div>
-
-            <div className="flex-1 relative">
-              <div className="relative w-full aspect-square max-w-md mx-auto">
-                <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl" />
-                <Card className="relative hover-elevate border-2" data-testid="card-demo">
-                  <CardHeader>
-                    <Badge variant="secondary" className="w-fit">Live Demo</Badge>
-                    <CardTitle className="text-xl">Transaction Protected</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                        <span className="text-sm font-medium">Escrow Active</span>
-                      </div>
-                      <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                        <div className="h-full bg-primary w-3/4 animate-pulse" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="p-3 bg-secondary rounded-lg">
-                        <Shield className="w-5 h-5 text-primary mb-1" />
-                        <p className="text-xs font-medium">Secure</p>
-                      </div>
-                      <div className="p-3 bg-secondary rounded-lg">
-                        <Truck className="w-5 h-5 text-primary mb-1" />
-                        <p className="text-xs font-medium">Tracked</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Waitlist Progress Section */}
-      <section className="py-12 px-6 border-y bg-accent/30">
-        <div className="max-w-4xl mx-auto">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-primary" />
-                <span className="font-semibold text-foreground">Launch Waitlist Progress</span>
-              </div>
-              <Badge variant="default" className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                Early Bird Perks
-              </Badge>
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">
-                  {count} {count === 1 ? 'vendor' : 'vendors'} joined
-                </span>
-                <span className="font-semibold text-foreground">Goal: 100 vendors</span>
-              </div>
-              <Progress value={progress} className="h-3" data-testid="progress-waitlist" />
-              <p className="text-xs text-muted-foreground text-center">
-                First 100 vendors get 3 months free Pro plan + priority onboarding
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Problem Section */}
-      <section id="problem" className="py-16 md:py-24 px-6 bg-card">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              The Trust Crisis in Social Commerce
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Nigeria's ₦5-10B social commerce market runs on broken trust
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <Card className="text-center border-2" data-testid="card-stat-abandonment">
-              <CardHeader>
-                <CardTitle className="text-4xl md:text-5xl font-bold text-primary" data-testid="text-stat-abandonment">40-60%</CardTitle>
-                <CardDescription className="text-base">Cart Abandonment Rate</CardDescription>
-              </CardHeader>
-            </Card>
-            <Card className="text-center border-2" data-testid="card-stat-market">
-              <CardHeader>
-                <CardTitle className="text-4xl md:text-5xl font-bold text-primary" data-testid="text-stat-market">₦5-10B</CardTitle>
-                <CardDescription className="text-base">Market Size (2025)</CardDescription>
-              </CardHeader>
-            </Card>
-            <Card className="text-center border-2" data-testid="card-stat-transfers">
-              <CardHeader>
-                <CardTitle className="text-4xl md:text-5xl font-bold text-primary" data-testid="text-stat-transfers">95%</CardTitle>
-                <CardDescription className="text-base">Direct Bank Transfers</CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="hover-elevate" data-testid="card-customer-pain">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-destructive/10 flex items-center justify-center mb-3">
-                  <AlertCircle className="w-6 h-6 text-destructive" />
-                </div>
-                <CardTitle>Customer Pain</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-destructive mt-2" />
-                  <p className="text-muted-foreground">No escrow protection on payments</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-destructive mt-2" />
-                  <p className="text-muted-foreground">No tracking or delivery confirmation</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-destructive mt-2" />
-                  <p className="text-muted-foreground">No recourse if product never arrives</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="hover-elevate" data-testid="card-vendor-pain">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-destructive/10 flex items-center justify-center mb-3">
-                  <AlertCircle className="w-6 h-6 text-destructive" />
-                </div>
-                <CardTitle>Vendor Pain</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-destructive mt-2" />
-                  <p className="text-muted-foreground">Hours spent confirming payments in DMs</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-destructive mt-2" />
-                  <p className="text-muted-foreground">Appear untrustworthy with personal accounts</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-destructive mt-2" />
-                  <p className="text-muted-foreground">Manual logistics coordination</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Transaction Flow Section */}
-      <section id="how-it-works" className="py-16 md:py-24 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 md:mb-16">
-            <Badge variant="secondary" className="mb-4">How It Works</Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Complete Transaction in 7 Simple Steps
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              From payment to delivery, everything happens automatically
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {[
-              { step: 1, icon: Smartphone, title: "Create Link", desc: "Vendor generates payment link with product details" },
-              { step: 2, icon: Wallet, title: "Customer Pays", desc: "Payment + 5% fee held securely in escrow" },
-              { step: 3, icon: Shield, title: "Escrow Active", desc: "Funds protected until delivery confirmed" },
-              { step: 4, icon: Truck, title: "Book Delivery", desc: "One-click Kwik logistics booking" },
-              { step: 5, icon: MapPin, title: "Live Tracking", desc: "Customer receives WhatsApp updates" },
-              { step: 6, icon: Check, title: "Confirmation", desc: "7-day window to confirm receipt" },
-              { step: 7, icon: TrendingUp, title: "Auto-Payout", desc: "Vendor receives 96% automatically" },
-            ].map((item, index) => (
-              <Card key={item.step} className="relative hover-elevate border-2" data-testid={`card-flow-step-${item.step}`}>
-                <CardHeader>
-                  <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold mb-3">
-                    {item.step}
-                  </div>
-                  <div className="w-12 h-12 rounded-lg bg-accent flex items-center justify-center mb-3">
-                    <item.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <CardTitle className="text-lg">{item.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
-                </CardContent>
-                {index < 6 && (
-                  <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-0.5 bg-primary/30" />
-                )}
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-16 md:py-24 px-6 bg-card">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Everything You Need to Build Trust
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: Shield, title: "Escrow Protection", desc: "Payments held securely until delivery confirmed. No risk for customers." },
-              { icon: Truck, title: "One-Click Logistics", desc: "Book Kwik delivery instantly. Prepaid from the 5% service fee." },
-              { icon: MessageSquare, title: "WhatsApp Automation", desc: "Automatic tracking updates sent directly to customer's WhatsApp." },
-              { icon: Smartphone, title: "No App Required", desc: "Works via shareable links. Customers pay directly in browser." },
-              { icon: MapPin, title: "Live Tracking", desc: "Real-time delivery tracking from pickup to doorstep." },
-              { icon: Wallet, title: "Auto-Payout", desc: "Receive funds automatically after confirmation period." },
-            ].map((feature) => (
-              <Card key={feature.title} className="hover-elevate border-2">
-                <CardHeader>
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                    <feature.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <CardTitle className="text-xl">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">{feature.desc}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className="py-16 md:py-24 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Transparent Pricing That Grows With You
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              All plans include escrow + logistics automation
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                name: "Free",
-                price: "₦0",
-                period: "/month",
-                transactions: "5 transactions/mo",
-                fee: "9%",
-                features: ["1 link/day", "Basic analytics", "WhatsApp updates", "Escrow protection"],
-              },
-              {
-                name: "Basic",
-                price: "₦10,000",
-                period: "/month",
-                transactions: "100 transactions/mo",
-                fee: "7.5%",
-                features: ["Unlimited links", "Advanced analytics", "Priority support", "Custom branding"],
-              },
-              {
-                name: "Pro",
-                price: "₦25,000",
-                period: "/month",
-                transactions: "Unlimited",
-                fee: "6%",
-                features: ["Everything in Basic", "API access", "Dedicated account manager", "White-label option"],
-                popular: true,
-              },
-              {
-                name: "Enterprise",
-                price: "Custom",
-                period: "",
-                transactions: "Unlimited",
-                fee: "4-5%",
-                features: ["Everything in Pro", "Custom integrations", "SLA guarantee", "24/7 phone support"],
-              },
-            ].map((plan) => (
-              <Card
-                key={plan.name}
-                className={`relative hover-elevate ${plan.popular ? "border-primary border-2 shadow-lg" : "border-2"}`}
-                data-testid={`card-pricing-${plan.name.toLowerCase()}`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge variant="default" className="font-semibold">Most Popular</Badge>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="p-4 md:p-6">
+                    <Form {...form}>
+                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <div className="flex flex-col gap-3">
+                          <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    type="email"
+                                    placeholder="Enter your email address..."
+                                    className="h-12 bg-white"
+                                    data-testid="input-email"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <Button type="submit" size="lg" className="h-12 text-base w-full font-bold shadow-lg shadow-primary/20" disabled={mutation.isPending} data-testid="button-join-waitlist">
+                            {mutation.isPending ? "Securing Spot..." : "Secure My Early Access"}
+                          </Button>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground justify-center">
+                          <Shield className="w-3 h-3" />
+                          <span>Bank-grade security • No spam pledge</span>
+                        </div>
+                      </form>
+                    </Form>
                   </div>
                 )}
-                <CardHeader>
-                  <CardTitle className="text-xl">{plan.name}</CardTitle>
-                  <div className="flex items-baseline gap-1 mt-4">
-                    <span className="text-4xl font-bold">{plan.price}</span>
-                    <span className="text-muted-foreground">{plan.period}</span>
+              </div>
+
+              {/* Social Proof / Count */}
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex -space-x-3">
+                  {[1,2,3,4].map(i => (
+                    <div key={i} className="w-8 h-8 rounded-full border-2 border-background bg-gray-100 flex items-center justify-center overflow-hidden">
+                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i*123}`} alt="User" />
+                    </div>
+                  ))}
+                </div>
+                <p>Join <strong className="text-foreground">{count > 0 ? count : "100+"}</strong> vendors waiting for launch</p>
+              </div>
+            </div>
+
+            {/* Right Content: Hero Images (Responsive) */}
+            <div className="flex-1 relative w-full max-w-[600px] lg:max-w-none">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/50">
+                {/* Mobile Image: Vertical - Person on Phone */}
+                
+
+[Image of Black business woman using phone]
+
+                <img 
+                  src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80" 
+                  alt="Secure transaction on phone"
+                  className="block md:hidden w-full h-[400px] object-cover"
+                />
+                {/* Desktop Image: Horizontal - Trust/Handshake context */}
+                
+
+[Image of business handshake deal]
+
+                <img 
+                  src="https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&w=1600&q=80" 
+                  alt="Happy business owner delivering package" 
+                  className="hidden md:block w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700"
+                />
+                
+                {/* Floating Badge */}
+                <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-4 rounded-xl border shadow-lg animate-fade-in-up">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+                      <Check className="w-6 h-6 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-sm">Payment Held Securely</p>
+                      <p className="text-xs text-muted-foreground">Released only after delivery is confirmed</p>
+                    </div>
                   </div>
-                  <CardDescription className="text-base mt-2">{plan.transactions}</CardDescription>
-                  <Badge variant="secondary" className="w-fit mt-2">
-                    {plan.fee} Vendra fee
-                  </Badge>
+                </div>
+              </div>
+              
+              {/* Background decorations */}
+              <div className="absolute -top-10 -right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-10" />
+              <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -z-10" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Waitlist Progress Bar */}
+      <div className="bg-green-50 border-y border-green-100 py-4">
+        <div className="container px-6 mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Clock className="w-5 h-5 text-green-600" />
+              <span className="font-medium text-green-900">Early Bird Status: <span className="font-bold">Active</span></span>
+            </div>
+            <div className="flex-1 w-full max-w-md flex items-center gap-3">
+              <Progress value={progress} className="h-3 bg-green-200" indicatorClassName="bg-green-600" />
+              <span className="text-xs font-bold text-green-700 whitespace-nowrap">{count}/100 Spots</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Problem Section - Updated Visuals */}
+      <section id="problem" className="py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Why selling on social media is hard</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Without a middleman, every transaction is a risk for both sides.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: AlertCircle,
+                color: "text-red-500",
+                bg: "bg-red-50",
+                title: "The \"Payment First\" Standoff",
+                desc: "Customers refuse to pay before delivery. You refuse to deliver before payment. The sale dies."
+              },
+              {
+                icon: Truck,
+                color: "text-orange-500",
+                bg: "bg-orange-50",
+                title: "Logistics Nightmares",
+                desc: "Calling bike men, negotiating prices, and praying the package actually arrives safely."
+              },
+              {
+                icon: Wallet,
+                color: "text-blue-500",
+                bg: "bg-blue-50",
+                title: "Manual Payment Tracking",
+                desc: "Sending account numbers in DMs and asking for screenshots of payment receipts."
+              }
+            ].map((item, i) => (
+              <Card key={i} className="border-none shadow-lg hover:shadow-xl transition-all duration-300">
+                <CardHeader>
+                  <div className={`w-14 h-14 ${item.bg} rounded-2xl flex items-center justify-center mb-4`}>
+                    <item.icon className={`w-7 h-7 ${item.color}`} />
+                  </div>
+                  <CardTitle className="text-xl">{item.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2">
-                        <Check className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                        <span className="text-sm text-muted-foreground">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
                 </CardContent>
-                <CardFooter>
-                  <Button
-                    variant={plan.popular ? "default" : "secondary"}
-                    className="w-full"
-                    data-testid={`button-choose-${plan.name.toLowerCase()}`}
-                  >
-                    {plan.name === "Free" ? "Start Free" : "Choose Plan"}
-                  </Button>
-                </CardFooter>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works - Simplified */}
+      <section id="how-it-works" className="py-20 px-6 bg-slate-50">
+        <div className="container mx-auto max-w-6xl">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="flex-1 space-y-8">
+              <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary font-semibold text-sm">
+                Simple Process
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold">How Vendra builds the trust</h2>
+              
+              <div className="space-y-6">
+                {[
+                  { step: "01", title: "Create a Link", desc: "Generate a secure payment link for your product in 5 seconds." },
+                  { step: "02", title: "Customer Pays Vendra", desc: "We hold the money. We tell you it's safe to ship." },
+                  { step: "03", title: "Automatic Delivery", desc: "Our logistics partners pick up and deliver instantly." },
+                  { step: "04", title: "You Get Paid", desc: "Once the customer accepts the item, funds hit your account." }
+                ].map((s) => (
+                  <div key={s.step} className="flex gap-4">
+                    <div className="font-bold text-2xl text-primary/30">{s.step}</div>
+                    <div>
+                      <h3 className="font-semibold text-lg">{s.title}</h3>
+                      <p className="text-muted-foreground">{s.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <Button size="lg" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                Get Started Now <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </div>
+            
+            <div className="flex-1">
+              <div className="relative">
+                {/* Using a relevant "Trust" image here */}
+                
+
+[Image of secure payment concept]
+
+                <img 
+                  src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80" 
+                  alt="Secure payment on phone" 
+                  className="rounded-2xl shadow-2xl border-8 border-white"
+                />
+                <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl border max-w-xs">
+                  <div className="flex items-start gap-3">
+                    <Shield className="w-8 h-8 text-primary mt-1" />
+                    <div>
+                      <p className="font-bold">Money Protected</p>
+                      <p className="text-xs text-muted-foreground">Funds are held in an escrow wallet until the buyer confirms the item is exactly as described.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing & Testimonials (Kept similar but cleaner) */}
+      <section className="py-20 px-6">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl font-bold mb-6">Fair Pricing for Everyone</h2>
+          <p className="text-muted-foreground mb-12">No monthly fees to start. We only make money when you make a sale.</p>
+          
+          <div className="grid md:grid-cols-2 gap-6 text-left">
+             <Card className="border-2 hover:border-primary/50 transition-colors">
+               <CardHeader>
+                 <CardTitle>Free Plan</CardTitle>
+                 <CardDescription>Perfect for occasional sellers</CardDescription>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-3xl font-bold mb-4">₦0 <span className="text-base font-normal text-muted-foreground">/month</span></div>
+                 <ul className="space-y-3">
+                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-600"/> 5 Free transactions/mo</li>
+                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-600"/> Escrow protection</li>
+                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-600"/> WhatsApp Notifications</li>
+                 </ul>
+               </CardContent>
+               <CardFooter>
+                  <Button variant="outline" className="w-full">Start Free</Button>
+               </CardFooter>
+             </Card>
+             
+             <Card className="border-2 border-primary bg-primary/5 relative overflow-hidden">
+               <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-bl-xl font-bold">BEST VALUE</div>
+               <CardHeader>
+                 <CardTitle>Pro Vendor</CardTitle>
+                 <CardDescription>For growing businesses</CardDescription>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-3xl font-bold mb-4">₦10,000 <span className="text-base font-normal text-muted-foreground">/month</span></div>
+                 <ul className="space-y-3">
+                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary"/> Unlimited transactions</li>
+                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary"/> Lower transaction fees (6%)</li>
+                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary"/> Dedicated Support</li>
+                 </ul>
+               </CardContent>
+               <CardFooter>
+                  <Button className="w-full">Choose Pro</Button>
+               </CardFooter>
+             </Card>
           </div>
         </div>
       </section>
