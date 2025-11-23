@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-// FIXED: Added 'Star', 'ChevronDown', and 'ArrowRight' to imports so nothing crashes
-import { Shield, Truck, MessageSquare, Smartphone, MapPin, Wallet, TrendingUp, AlertCircle, Check, ChevronDown, Star, Zap, Clock, Users, ArrowRight } from "lucide-react";
+import { Shield, Truck, MessageSquare, Smartphone, MapPin, Wallet, TrendingUp, AlertCircle, Check, Clock, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +15,8 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Progress } from "@/components/ui/progress";
+// Star was missing in previous version, added back to prevent white screen crash
+import { Star } from "lucide-react";
 
 const emailSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -72,7 +73,7 @@ export default function Home() {
     <div className="min-h-screen bg-background font-sans">
       <Header />
       
-      {/* HERO SECTION - UPGRADED VISUALS */}
+      {/* HERO SECTION */}
       <section id="hero" className="relative pt-8 pb-16 md:py-24 overflow-hidden px-6">
         {/* Background Gradients */}
         <div className="absolute inset-0 bg-gradient-to-br from-secondary via-background to-accent/20 -z-10" />
@@ -81,7 +82,7 @@ export default function Home() {
         <div className="container max-w-7xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             
-            {/* LEFT SIDE: Text & Form */}
+            {/* LEFT SIDE: Content */}
             <div className="flex-1 text-center lg:text-left space-y-8 animate-fade-in z-10">
               <div className="space-y-4">
                 <Badge variant="secondary" className="text-primary font-semibold px-4 py-2 text-sm">
@@ -89,7 +90,7 @@ export default function Home() {
                 </Badge>
                 <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
                   Stop Losing Sales to the{" "}
-                  <span className="text-primary relative">
+                  <span className="text-primary relative inline-block">
                     Trust Gap
                     <svg className="absolute w-full h-3 -bottom-1 left-0 text-primary/20" viewBox="0 0 100 10" preserveAspectRatio="none">
                       <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
@@ -168,20 +169,23 @@ export default function Home() {
             {/* RIGHT SIDE: The Images */}
             <div className="flex-1 relative w-full max-w-[600px] lg:max-w-none">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/50">
-                {/* Mobile Image (Vertical) */}
+                
+                {/* 1. MOBILE IMAGE (Visible only on small screens) */}
                 <img 
                   src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80" 
                   alt="Secure transaction on mobile"
-                  className="block md:hidden w-full h-[450px] object-cover"
+                  className="block lg:hidden w-full h-[400px] object-cover"
                 />
-                {/* Desktop Image (Horizontal) */}
+
+                {/* 2. DESKTOP IMAGE (Visible only on large screens) */}
+                {/* FIXED: Added h-[500px] to force height so it doesn't disappear */}
                 <img 
-                  src="https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&w=1600&q=80" 
-                  alt="Happy business owner delivering package" 
-                  className="hidden md:block w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700"
+                  src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1600&q=80" 
+                  alt="Business handshake trust" 
+                  className="hidden lg:block w-full h-[500px] object-cover"
                 />
                 
-                {/* Floating "Trust" Badge */}
+                {/* Floating Badge */}
                 <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md p-4 rounded-xl border shadow-lg animate-in slide-in-from-bottom-4 duration-1000">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shrink-0">
@@ -195,7 +199,7 @@ export default function Home() {
                 </div>
               </div>
               
-              {/* Background Blobs */}
+              {/* Background Decoration */}
               <div className="absolute -top-10 -right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-10" />
               <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -z-10" />
             </div>
@@ -204,7 +208,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Waitlist Progress Section */}
+      {/* Waitlist Progress */}
       <section className="py-12 px-6 border-y bg-accent/30">
         <div className="max-w-4xl mx-auto">
           <div className="space-y-4">
@@ -317,7 +321,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Transaction Flow Section - WITH IMAGE */}
+      {/* Transaction Flow */}
       <section id="how-it-works" className="py-16 md:py-24 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
