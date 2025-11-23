@@ -171,13 +171,13 @@ export default function Home() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/50">
                 {/* Mobile Image: Vertical Focus (Person on phone) */}
                 <img 
-                  src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80" 
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFH7XGfgDUIPebTXoorh4KojAgdlFPdWC51A&s" 
                   alt="Secure transaction on mobile"
                   className="block md:hidden w-full h-[450px] object-cover"
                 />
                 {/* Desktop Image: Horizontal Focus (Trust/Business context) */}
                 <img 
-                  src="https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&w=1600&q=80" 
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFH7XGfgDUIPebTXoorh4KojAgdlFPdWC51A&s" 
                   alt="Happy business owner delivering package" 
                   className="hidden md:block w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700"
                 />
