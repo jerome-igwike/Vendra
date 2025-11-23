@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Shield, Truck, MessageSquare, Smartphone, MapPin, Wallet, TrendingUp, AlertCircle, Check, Clock, Users, ArrowRight, Star } from "lucide-react";
+import { Shield, Truck, MessageSquare, Smartphone, MapPin, Wallet, TrendingUp, AlertCircle, Check, Clock, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -171,13 +171,13 @@ export default function Home() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/50">
                 {/* Mobile Image: Vertical Focus (Person on phone) */}
                 <img 
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFH7XGfgDUIPebTXoorh4KojAgdlFPdWC51A&s" 
+                  src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80" 
                   alt="Secure transaction on mobile"
                   className="block md:hidden w-full h-[450px] object-cover"
                 />
                 {/* Desktop Image: Horizontal Focus (Trust/Business context) */}
                 <img 
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFH7XGfgDUIPebTXoorh4KojAgdlFPdWC51A&s" 
+                  src="https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&w=1600&q=80" 
                   alt="Happy business owner delivering package" 
                   className="hidden md:block w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700"
                 />
