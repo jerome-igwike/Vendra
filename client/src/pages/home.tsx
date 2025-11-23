@@ -28,7 +28,7 @@ export default function Home() {
 
   const { data: waitlistCount, isLoading: isLoadingCount, isError: isErrorCount } = useQuery<{ count: number }>({
     queryKey: ["/api/waitlist"],
-    refetchInterval: 5000, // Retaining your live update logic
+    refetchInterval: 5000, 
   });
 
   const form = useForm<EmailFormData>({
@@ -73,14 +73,13 @@ export default function Home() {
       
       {/* HERO SECTION - UPGRADED VISUALS */}
       <section id="hero" className="relative pt-8 pb-16 md:py-24 overflow-hidden px-6">
-        {/* Background Gradients (Retained) */}
         <div className="absolute inset-0 bg-gradient-to-br from-secondary via-background to-accent/20 -z-10" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,166,81,0.08),transparent_50%)] -z-10" />
         
         <div className="container max-w-7xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             
-            {/* LEFT SIDE: Text & Form (Retained Logic) */}
+            {/* LEFT SIDE: Text & Form */}
             <div className="flex-1 text-center lg:text-left space-y-8 animate-fade-in z-10">
               <div className="space-y-4">
                 <Badge variant="secondary" className="text-primary font-semibold px-4 py-2 text-sm">
@@ -90,7 +89,6 @@ export default function Home() {
                   Stop Losing Sales to the{" "}
                   <span className="text-primary relative">
                     Trust Gap
-                    {/* Subtle underline visual */}
                     <svg className="absolute w-full h-3 -bottom-1 left-0 text-primary/20" viewBox="0 0 100 10" preserveAspectRatio="none">
                       <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
                     </svg>
@@ -101,7 +99,6 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* FORM LOGIC (Retained Exactly) */}
               {submittedEmail ? (
                 <Card className="border-primary/20 bg-accent/30 shadow-sm" data-testid="card-success">
                   <CardContent className="pt-6">
@@ -166,16 +163,16 @@ export default function Home() {
               )}
             </div>
 
-            {/* RIGHT SIDE: The "Nice Image" (Replaces the Bubble Demo) */}
+            {/* RIGHT SIDE: The Images */}
             <div className="flex-1 relative w-full max-w-[600px] lg:max-w-none">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/50">
-                {/* Mobile Image: Vertical Focus (Person on phone) */}
+                {/* Mobile Image (Vertical) */}
                 <img 
                   src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80" 
                   alt="Secure transaction on mobile"
                   className="block md:hidden w-full h-[450px] object-cover"
                 />
-                {/* Desktop Image: Horizontal Focus (Trust/Business context) */}
+                {/* Desktop Image (Horizontal) */}
                 <img 
                   src="https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&w=1600&q=80" 
                   alt="Happy business owner delivering package" 
@@ -205,7 +202,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Waitlist Progress Section (Retained) */}
+      {/* Waitlist Progress Section */}
       <section className="py-12 px-6 border-y bg-accent/30">
         <div className="max-w-4xl mx-auto">
           <div className="space-y-4">
@@ -235,7 +232,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Problem Section (Retained) */}
+      {/* Problem Section */}
       <section id="problem" className="py-16 md:py-24 px-6 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -318,8 +315,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Transaction Flow Section (Retained Grid Layout) */}
-      <section id="how-it-works" className="py-16 md:py-24 px-6">
+      {/* Transaction Flow Section */}
+      <section id="how-it-works" className="py-16 md:py-24 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
             <Badge variant="secondary" className="mb-4">How It Works</Badge>
@@ -331,39 +328,55 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {[
-              { step: 1, icon: Smartphone, title: "Create Link", desc: "Vendor generates payment link with product details" },
-              { step: 2, icon: Wallet, title: "Customer Pays", desc: "Payment + 5% fee held securely in escrow" },
-              { step: 3, icon: Shield, title: "Escrow Active", desc: "Funds protected until delivery confirmed" },
-              { step: 4, icon: Truck, title: "Book Delivery", desc: "One-click Kwik logistics booking" },
-              { step: 5, icon: MapPin, title: "Live Tracking", desc: "Customer receives WhatsApp updates" },
-              { step: 6, icon: Check, title: "Confirmation", desc: "7-day window to confirm receipt" },
-              { step: 7, icon: TrendingUp, title: "Auto-Payout", desc: "Vendor receives 96% automatically" },
-            ].map((item, index) => (
-              <Card key={item.step} className="relative hover-elevate border-2" data-testid={`card-flow-step-${item.step}`}>
-                <CardHeader>
-                  <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold mb-3">
-                    {item.step}
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="flex-1 space-y-8">
+              <div className="grid gap-6">
+                {[
+                  { step: "01", title: "Create Link", desc: "Vendor generates payment link with product details" },
+                  { step: "02", title: "Customer Pays", desc: "Payment + 5% fee held securely in escrow" },
+                  { step: "03", title: "Escrow Active", desc: "Funds protected until delivery confirmed" },
+                  { step: "04", title: "Book Delivery", desc: "One-click Kwik logistics booking" },
+                  { step: "05", title: "Live Tracking", desc: "Customer receives WhatsApp updates" },
+                  { step: "06", title: "Confirmation", desc: "7-day window to confirm receipt" },
+                  { step: "07", title: "Auto-Payout", desc: "Vendor receives 96% automatically" },
+                ].map((s) => (
+                  <div key={s.step} className="flex gap-4 p-4 bg-white rounded-lg border shadow-sm">
+                    <div className="font-bold text-xl text-primary/40">{s.step}</div>
+                    <div>
+                      <h3 className="font-semibold">{s.title}</h3>
+                      <p className="text-sm text-muted-foreground">{s.desc}</p>
+                    </div>
                   </div>
-                  <div className="w-12 h-12 rounded-lg bg-accent flex items-center justify-center mb-3">
-                    <item.icon className="w-6 h-6 text-primary" />
+                ))}
+              </div>
+              <Button size="lg" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                Get Started Now <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </div>
+            
+            <div className="flex-1 relative">
+              <div className="sticky top-24">
+                <img 
+                  src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80" 
+                  alt="Secure payment on phone" 
+                  className="rounded-2xl shadow-2xl border-8 border-white w-full"
+                />
+                <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl border max-w-xs hidden md:block">
+                  <div className="flex items-start gap-3">
+                    <Shield className="w-8 h-8 text-primary mt-1" />
+                    <div>
+                      <p className="font-bold">Money Protected</p>
+                      <p className="text-xs text-muted-foreground">Funds are held in an escrow wallet until the buyer confirms the item is exactly as described.</p>
+                    </div>
                   </div>
-                  <CardTitle className="text-lg">{item.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
-                </CardContent>
-                {index < 6 && (
-                  <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-0.5 bg-primary/30" />
-                )}
-              </Card>
-            ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section (Retained) */}
+      {/* Features Section */}
       <section id="features" className="py-16 md:py-24 px-6 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -397,7 +410,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing Section (Retained) */}
+      {/* Pricing Section */}
       <section id="pricing" className="py-16 md:py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -491,7 +504,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Modes Section (Retained) */}
+      {/* Modes Section */}
       <section className="py-16 md:py-24 px-6 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -564,7 +577,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Trust Section (Retained) */}
+      {/* Trust Section */}
       <section className="py-16 md:py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -632,7 +645,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section (Retained) */}
+      {/* Testimonials Section */}
       <section className="py-16 md:py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -715,7 +728,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FAQ Section (Retained) */}
+      {/* FAQ Section */}
       <section id="faq" className="py-16 md:py-24 px-6 bg-card">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
@@ -792,7 +805,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Final CTA Section (Retained) */}
+      {/* Final CTA Section */}
       <section className="py-16 md:py-24 px-6 bg-gradient-to-br from-primary/5 via-background to-accent/10 border-t-2 border-primary/20">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <div className="space-y-4">
