@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Shield, Truck, MessageSquare, Smartphone, MapPin, Wallet, TrendingUp, AlertCircle, Check, ChevronDown, Star, Zap, Clock, Users } from "lucide-react";
+import { Shield, Truck, MessageSquare, Smartphone, MapPin, Wallet, TrendingUp, AlertCircle, Check, Clock, Users, ArrowRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,10 +26,11 @@ export default function Home() {
   const { toast } = useToast();
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
- const { data: waitlistCount, isLoading: isLoadingCount, isError: isErrorCount } = useQuery<{ count: number }>({
+  const { data: waitlistCount, isLoading: isLoadingCount, isError: isErrorCount } = useQuery<{ count: number }>({
     queryKey: ["/api/waitlist"],
-    refetchInterval: 5000, // <--- ADD THIS: Refetch every 5 seconds
+    refetchInterval: 5000, // Retaining your live update logic
   });
+
   const form = useForm<EmailFormData>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
@@ -44,7 +45,7 @@ export default function Home() {
     onSuccess: (_, variables) => {
       setSubmittedEmail(variables.email);
       form.reset();
-      queryClient.invalidateQueries({ queryKey: ["/api/waitlist/count"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/waitlist"] });
       toast({
         title: "Welcome to Vendra!",
         description: "You're on the waitlist. Check your email for early bird perks!",
@@ -67,32 +68,42 @@ export default function Home() {
   const progress = Math.min((count / 100) * 100, 100);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background font-sans">
       <Header />
-      {/* Hero Section */}
-      <section id="hero" className="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-6 py-16 md:py-24">
+      
+      {/* HERO SECTION - UPGRADED VISUALS */}
+      <section id="hero" className="relative pt-8 pb-16 md:py-24 overflow-hidden px-6">
+        {/* Background Gradients (Retained) */}
         <div className="absolute inset-0 bg-gradient-to-br from-secondary via-background to-accent/20 -z-10" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,166,81,0.08),transparent_50%)] -z-10" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMGE2NTEiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItaDJ2LTJoLTJ6bTAgNHYyaDJ2LTJoLTJ6bS0yIDJ2Mmgydi0yaC0yem0wLTR2Mmgydi0yaC0yem0yLTJ2LTJoLTJ2Mmgyem0wLTR2LTJoLTJ2Mmgyem0yIDJ2LTJoLTJ2Mmgyem0yIDJ2LTJoLTJ2Mmgyem0yIDJ2LTJoLTJ2Mmgyem0yIDJ2LTJoLTJ2Mmgyem0wIDJ2Mmgydi0yaC0yem0wIDRoMnYtMmgtMnYyem0tMiAwaDJ2LTJoLTJ2MnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40 -z-10" />
         
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-            <div className="flex-1 text-center lg:text-left space-y-8 animate-fade-in">
+        <div className="container max-w-7xl mx-auto w-full">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+            
+            {/* LEFT SIDE: Text & Form (Retained Logic) */}
+            <div className="flex-1 text-center lg:text-left space-y-8 animate-fade-in z-10">
               <div className="space-y-4">
                 <Badge variant="secondary" className="text-primary font-semibold px-4 py-2 text-sm">
                   Africa's Trust Layer
                 </Badge>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
                   Stop Losing Sales to the{" "}
-                  <span className="text-primary">Trust Gap</span>
+                  <span className="text-primary relative">
+                    Trust Gap
+                    {/* Subtle underline visual */}
+                    <svg className="absolute w-full h-3 -bottom-1 left-0 text-primary/20" viewBox="0 0 100 10" preserveAspectRatio="none">
+                      <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
+                    </svg>
+                  </span>
                 </h1>
-                <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0">
-                  Secure payments + automatic delivery for Instagram & WhatsApp sellers across Nigeria
+                <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                  Secure payments + automatic delivery for Instagram & WhatsApp sellers across Nigeria. We hold the money until the item is delivered.
                 </p>
               </div>
 
+              {/* FORM LOGIC (Retained Exactly) */}
               {submittedEmail ? (
-                <Card className="border-primary/20 bg-accent/30" data-testid="card-success">
+                <Card className="border-primary/20 bg-accent/30 shadow-sm" data-testid="card-success">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-primary mt-0.5" data-testid="icon-success" />
@@ -120,7 +131,7 @@ export default function Home() {
                                 {...field}
                                 type="email"
                                 placeholder="your@email.com"
-                                className="h-12 text-base bg-card border-input"
+                                className="h-12 text-base bg-white border-input shadow-sm"
                                 data-testid="input-email"
                               />
                             </FormControl>
@@ -131,20 +142,23 @@ export default function Home() {
                       <Button
                         type="submit"
                         size="lg"
-                        className="h-12 px-8 font-semibold"
+                        className="h-12 px-8 font-bold shadow-md"
                         disabled={mutation.isPending}
                         data-testid="button-join-waitlist"
                       >
-                        {mutation.isPending ? "Joining..." : "Join Waitlist"}
+                        {mutation.isPending ? "Joining..." : "Secure My Spot"}
                       </Button>
                     </div>
-                    <p className="text-sm text-muted-foreground text-center lg:text-left" data-testid="text-waitlist-count">
+                    <p className="text-sm text-muted-foreground text-center lg:text-left flex items-center justify-center lg:justify-start gap-2" data-testid="text-waitlist-count">
                       {isLoadingCount ? (
                         "Loading..."
                       ) : isErrorCount ? (
                         "Join the waitlist • Launching Q1 2026"
                       ) : (
-                        `Join ${count}+ vendors building trust • Launching Q1 2026`
+                        <>
+                          <Users className="w-4 h-4" /> 
+                          <span>Join <span className="font-bold text-foreground">{count}+</span> vendors waiting for launch</span>
+                        </>
                       )}
                     </p>
                   </form>
@@ -152,43 +166,46 @@ export default function Home() {
               )}
             </div>
 
-            <div className="flex-1 relative">
-              <div className="relative w-full aspect-square max-w-md mx-auto">
-                <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl" />
-                <Card className="relative hover-elevate border-2" data-testid="card-demo">
-                  <CardHeader>
-                    <Badge variant="secondary" className="w-fit">Live Demo</Badge>
-                    <CardTitle className="text-xl">Transaction Protected</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                        <span className="text-sm font-medium">Escrow Active</span>
-                      </div>
-                      <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                        <div className="h-full bg-primary w-3/4 animate-pulse" />
-                      </div>
+            {/* RIGHT SIDE: The "Nice Image" (Replaces the Bubble Demo) */}
+            <div className="flex-1 relative w-full max-w-[600px] lg:max-w-none">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/50">
+                {/* Mobile Image: Vertical Focus (Person on phone) */}
+                <img 
+                  src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80" 
+                  alt="Secure transaction on mobile"
+                  className="block md:hidden w-full h-[450px] object-cover"
+                />
+                {/* Desktop Image: Horizontal Focus (Trust/Business context) */}
+                <img 
+                  src="https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&w=1600&q=80" 
+                  alt="Happy business owner delivering package" 
+                  className="hidden md:block w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-700"
+                />
+                
+                {/* Floating "Trust" Badge */}
+                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md p-4 rounded-xl border shadow-lg animate-in slide-in-from-bottom-4 duration-1000">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+                      <Check className="w-6 h-6 text-green-600" />
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="p-3 bg-secondary rounded-lg">
-                        <Shield className="w-5 h-5 text-primary mb-1" />
-                        <p className="text-xs font-medium">Secure</p>
-                      </div>
-                      <div className="p-3 bg-secondary rounded-lg">
-                        <Truck className="w-5 h-5 text-primary mb-1" />
-                        <p className="text-xs font-medium">Tracked</p>
-                      </div>
+                    <div>
+                      <p className="font-bold text-sm">Escrow Active</p>
+                      <p className="text-xs text-muted-foreground">Payment held securely until delivery confirmed</p>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
+              
+              {/* Background Blobs */}
+              <div className="absolute -top-10 -right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-10" />
+              <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -z-10" />
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* Waitlist Progress Section */}
+      {/* Waitlist Progress Section (Retained) */}
       <section className="py-12 px-6 border-y bg-accent/30">
         <div className="max-w-4xl mx-auto">
           <div className="space-y-4">
@@ -218,7 +235,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Problem Section */}
+      {/* Problem Section (Retained) */}
       <section id="problem" className="py-16 md:py-24 px-6 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -301,7 +318,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Transaction Flow Section */}
+      {/* Transaction Flow Section (Retained Grid Layout) */}
       <section id="how-it-works" className="py-16 md:py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -346,7 +363,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Section (Retained) */}
       <section id="features" className="py-16 md:py-24 px-6 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -380,7 +397,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing Section */}
+      {/* Pricing Section (Retained) */}
       <section id="pricing" className="py-16 md:py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -474,7 +491,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Modes Section */}
+      {/* Modes Section (Retained) */}
       <section className="py-16 md:py-24 px-6 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -547,7 +564,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Trust Section */}
+      {/* Trust Section (Retained) */}
       <section className="py-16 md:py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -615,7 +632,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* Testimonials Section (Retained) */}
       <section className="py-16 md:py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
@@ -698,7 +715,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* FAQ Section (Retained) */}
       <section id="faq" className="py-16 md:py-24 px-6 bg-card">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
@@ -775,7 +792,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Final CTA Section */}
+      {/* Final CTA Section (Retained) */}
       <section className="py-16 md:py-24 px-6 bg-gradient-to-br from-primary/5 via-background to-accent/10 border-t-2 border-primary/20">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <div className="space-y-4">
